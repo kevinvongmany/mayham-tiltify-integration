@@ -2,6 +2,7 @@ import hmac
 import hashlib
 import json
 import os
+from typing import Annotated
 
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -40,7 +41,8 @@ def verify_signature(raw_body: bytes, signature_header: str | None) -> bool:
 @app.post("/tiltify/webhook")
 async def tiltify_webhook(
     request: Request,
-    x_tiltify_signature: str | None = Header(default=None),
+    x_tiltify_signature: Annotated[str | None, Header()] = None,
+    x_tiltify_timestamp: Annotated[str | None, Header()] = None,
 ):
     """
     Webhook endpoint that receives POSTs from Tiltify.
@@ -48,8 +50,11 @@ async def tiltify_webhook(
     # Read raw body first for signature verification
     raw_body = await request.body()
 
+    signed_payload = f"{x_tiltify_timestamp}.{raw_body}"
+    print("Signed Payload:", signed_payload)
+
     # Verify signature if secret is configured
-    if not verify_signature(raw_body, x_tiltify_signature):
+    if not verify_signature(signed_payload, x_tiltify_signature):
         raise HTTPException(status_code=401, detail="Invalid signature")
 
     # Parse JSON
@@ -60,14 +65,15 @@ async def tiltify_webhook(
 
     # Example: inspect event type and handle it
     # Tiltify webhook payloads will show the event schema in the dashboard's test payload.[web:18]
-    event_type = payload.get("type") or payload.get("event")  # adjust to actual field
+    meta_data = payload.get("meta", {})
+    event_type = meta_data.get("event_type")  # adjust to actual field
 
-    if event_type == "donation_updated":
+    if "donation_updated" in event_type:
         data = payload.get("data", {})
         amount = data.get("amount", {})
         value = amount.get("value")
         currency = amount.get("currency")
-        donor_name = data.get("donor_name")  # field names depend on your event type
+        donor_name = payload.get("donor_name")  # field names depend on your event type
         # TODO: persist or process the donation as needed
         print(f"New donation: {value} {currency} from {donor_name}")
 
