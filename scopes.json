@@ -1,0 +1,1 @@
+{"scope": ["user:read:email", "channel:bot", "channel:read:subscriptions"], "auth_params": {"redirect_uri": "https://bonkybot.kevinvongmany.com/accounts/twitch/login/callback/"}}
