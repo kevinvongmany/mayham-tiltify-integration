@@ -83,5 +83,3 @@ async def tiltify_webhook(
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}
-
-app.run()
