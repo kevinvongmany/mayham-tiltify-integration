@@ -50,7 +50,7 @@ async def tiltify_webhook(
     # Read raw body first for signature verification
     raw_body = await request.body()
 
-    signed_payload = f"{x_tiltify_timestamp}.{raw_body}"
+    signed_payload = f"{x_tiltify_timestamp}.{raw_body.decode("utf-8")}".encode("utf-8")
     print("Signed Payload:", signed_payload)
 
     # Verify signature if secret is configured
