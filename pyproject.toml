@@ -1,16 +1,9 @@
 [project]
-name = "mayham"
+name = "mayham-tiltify-plugin"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "twitchio[starlette]>=3.0.0b4",
-    "requests>=2.32.3",
-    "websockets>=15.0.1",
-]
-
-[dependency-groups]
-dev = [
-    "pyinstaller>=6.13.0",
+    "fastapi>=0.128.0",
 ]
