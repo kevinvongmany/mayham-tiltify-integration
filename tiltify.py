@@ -1,4 +1,5 @@
 import hmac
+import base64
 import hashlib
 import json
 import os
@@ -31,7 +32,8 @@ def verify_signature(raw_body: bytes, signature_header: str | None) -> bool:
         msg=raw_body,
         digestmod=hashlib.sha256,
     )
-    expected = mac.hexdigest()
+    digest_bytes = mac.digest()
+    expected = base64.b64encode(digest_bytes).decode("utf-8")
 
     # Many providers send hex digest; adjust if Tiltify uses a different scheme.
     # constant-time compare to avoid timing attacks
