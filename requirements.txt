@@ -6,8 +6,14 @@ annotated-types==0.7.0
     # via pydantic
 anyio==4.12.1
     # via starlette
+click==8.3.1
+    # via uvicorn
+colorama==0.4.6
+    # via click
 fastapi==0.128.0
     # via mayham-tiltify-plugin (pyproject.toml)
+h11==0.16.0
+    # via uvicorn
 idna==3.11
     # via anyio
 pydantic==2.12.5
@@ -24,3 +30,5 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.2
     # via pydantic
+uvicorn==0.40.0
+    # via mayham-tiltify-plugin (pyproject.toml)
