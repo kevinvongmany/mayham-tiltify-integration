@@ -79,3 +79,9 @@ async def tiltify_webhook(
 
     # IMPORTANT: respond 2xx quickly so Tiltify does not deactivate the webhook.[web:1][web:2]
     return JSONResponse({"status": "ok"}, status_code=200)
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
+
+app.run()
