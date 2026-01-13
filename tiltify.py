@@ -4,6 +4,9 @@ import hashlib
 import json
 import os
 from typing import Annotated
+import websockets
+import asyncio
+from random import choice
 
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -14,11 +17,59 @@ TILTIFY_WEBHOOK_SECRET = os.getenv("TILTIFY_WEBHOOK_SECRET", "")
 app = FastAPI()
 
 
+async def send_ws_message(message):
+    uri = "wss://l0axmgjep7.execute-api.ap-southeast-2.amazonaws.com/beta"
+
+    message = {
+        "action": "sendmessage",
+        "message": message
+    }
+
+    async with websockets.connect(uri) as websocket:
+        # Send the message as a JSON string
+        await websocket.send(json.dumps(message))
+        print(f"Sent: {message}")
+
+        # Optionally receive a reply
+        try:
+            response = await asyncio.wait_for(websocket.recv(), timeout=3)
+            print("Received:", response)
+        except asyncio.TimeoutError:
+            print("No reply received (timeout or no server response)")
+
+async def invoke_override(tier: str) -> None:
+    override_tiers = {
+        "tier_1": [
+            "pull_ghost",
+            "open_inventory",
+            "jump_and_ability",
+            "class_ability",
+            "powered_melee",
+        ],
+        "tier_2": [
+            "throw_grenade",
+            "super",
+            "transcendence",
+            "jumpscare",
+            "hold_forward",
+        ],
+        "tier_3": [
+            "look_down",
+            "turn_around",
+            "all_abilities",
+            "dump_heavy",
+            "dump_kinetic",
+            "random_loadout",
+        ],
+        "tier_4": ["alt_f4"]
+    }
+    print(f"Invoking a {tier} command")
+    selected_override = override_tiers[tier]
+    random_command = choice(selected_override)
+    print(f"Command triggered: {random_command}")
+    await send_ws_message(random_command)
+
 def verify_signature(raw_body: bytes, signature_header: str | None) -> bool:
-    """
-    Example HMAC verification.
-    Adjust the header name / format to match how you configure the secret in Tiltify.
-    """
     if not TILTIFY_WEBHOOK_SECRET:
         # If you have not configured a secret, skip verification (not recommended)
         return True
@@ -49,34 +100,37 @@ async def tiltify_webhook(
     """
     Webhook endpoint that receives POSTs from Tiltify.
     """
-    # Read raw body first for signature verification
     raw_body = await request.body()
 
     signed_payload = f"{x_tiltify_timestamp}.{raw_body.decode("utf-8")}".encode("utf-8")
-    print("Signed Payload:", signed_payload)
 
-    # Verify signature if secret is configured
     if not verify_signature(signed_payload, x_tiltify_signature):
         raise HTTPException(status_code=401, detail="Invalid signature")
 
-    # Parse JSON
     try:
         payload = json.loads(raw_body.decode("utf-8"))
     except json.JSONDecodeError:
         raise HTTPException(status_code=400, detail="Invalid JSON")
 
-    # Example: inspect event type and handle it
-    # Tiltify webhook payloads will show the event schema in the dashboard's test payload.[web:18]
     meta_data = payload.get("meta", {})
-    event_type = meta_data.get("event_type")  # adjust to actual field
+    event_type = meta_data.get("event_type")
 
     if "donation_updated" in event_type:
         data = payload.get("data", {})
         amount = data.get("amount", {})
-        value = amount.get("value")
+        raw_value = amount.get("value")
+        value = float(raw_value)
         currency = amount.get("currency")
-        donor_name = payload.get("donor_name")  # field names depend on your event type
-        # TODO: persist or process the donation as needed
+        donor_name = payload.get("donor_name") 
+        if currency == "USD":
+            if value >= 7 and value < 14:
+                await invoke_override("tier_1")
+            elif value >= 14 and value < 70:
+                await invoke_override("tier_2")
+            elif value >= 70 and value < 250:
+                await invoke_override("tier_3")
+            elif value >= 250:
+                await invoke_override("tier_4")
         print(f"New donation: {value} {currency} from {donor_name}")
 
     # IMPORTANT: respond 2xx quickly so Tiltify does not deactivate the webhook.[web:1][web:2]

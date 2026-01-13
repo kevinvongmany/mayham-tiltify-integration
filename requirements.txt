@@ -32,3 +32,5 @@ typing-inspection==0.4.2
     # via pydantic
 uvicorn==0.40.0
     # via mayham-tiltify-plugin (pyproject.toml)
+websockets==16.0
+    # via mayham-tiltify-plugin (pyproject.toml)
