@@ -45,6 +45,8 @@ async def invoke_override(tier: str) -> None:
             "jump_and_ability",
             "class_ability",
             "powered_melee",
+            "look_down",
+            "turn_around",
         ],
         "tier_2": [
             "throw_grenade",
@@ -54,8 +56,6 @@ async def invoke_override(tier: str) -> None:
             "hold_forward",
         ],
         "tier_3": [
-            "look_down",
-            "turn_around",
             "all_abilities",
             "dump_heavy",
             "dump_kinetic",
