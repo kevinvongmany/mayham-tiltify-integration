@@ -60,6 +60,7 @@ async def invoke_override(tier: str) -> None:
             "dump_heavy",
             "dump_kinetic",
             "random_loadout",
+            "dance_party",
         ],
         "tier_4": ["alt_f4"]
     }
