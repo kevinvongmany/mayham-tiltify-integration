@@ -124,13 +124,13 @@ async def tiltify_webhook(
         currency = amount.get("currency")
         donor_name = payload.get("donor_name") 
         if currency == "USD":
-            if value >= 7 and value < 14:
+            if value >= 5 and value < 10:
                 await invoke_override("tier_1")
-            elif value >= 14 and value < 70:
+            elif value >= 10 and value < 50:
                 await invoke_override("tier_2")
-            elif value >= 70 and value < 250:
+            elif value >= 50 and value < 100:
                 await invoke_override("tier_3")
-            elif value >= 250:
+            elif value >= 100:
                 await invoke_override("tier_4")
         print(f"New donation: {value} {currency} from {donor_name}")
 
