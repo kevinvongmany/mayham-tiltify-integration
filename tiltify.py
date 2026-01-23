@@ -47,22 +47,20 @@ async def invoke_override(tier: str) -> None:
             "powered_melee",
             "look_down",
             "turn_around",
-        ],
-        "tier_2": [
             "throw_grenade",
             "super",
             "transcendence",
             "jumpscare",
             "hold_forward",
         ],
-        "tier_3": [
+        "tier_2": [
             "all_abilities",
             "dump_heavy",
             "dump_kinetic",
             "random_loadout",
             "dance_party",
         ],
-        "tier_4": ["alt_f4"]
+        "tier_3": ["alt_f4"]
     }
     print(f"Invoking a {tier} command")
     selected_override = override_tiers[tier]
@@ -124,14 +122,12 @@ async def tiltify_webhook(
         currency = amount.get("currency")
         donor_name = payload.get("donor_name") 
         if currency == "USD":
-            if value >= 5 and value < 10:
+            if value >= 10 and value < 50:
                 await invoke_override("tier_1")
-            elif value >= 10 and value < 50:
-                await invoke_override("tier_2")
             elif value >= 50 and value < 100:
-                await invoke_override("tier_3")
+                await invoke_override("tier_2")
             elif value >= 100:
-                await invoke_override("tier_4")
+                await invoke_override("tier_3")
         print(f"New donation: {value} {currency} from {donor_name}")
 
     # IMPORTANT: respond 2xx quickly so Tiltify does not deactivate the webhook.[web:1][web:2]
