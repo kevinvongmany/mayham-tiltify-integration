@@ -50,7 +50,7 @@ async def invoke_override(tier: str) -> None:
             "throw_grenade",
             "super",
             "transcendence",
-            "jumpscare",
+            # "jumpscare",
             "hold_forward",
         ],
         "tier_2": [
