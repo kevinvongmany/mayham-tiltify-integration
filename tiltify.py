@@ -131,9 +131,12 @@ async def tiltify_webhook(
             elif value >= 14 and value < 70:
                 await invoke_override("jumpscare")
                 await invoke_override("tier_2")
-            elif value >= 250:
+            elif value >= 70 and value < 250:
                 await invoke_override("jumpscare")
                 await invoke_override("tier_3")
+            elif value >= 250:
+                await invoke_override("jumpscare")
+                await invoke_override("tier_4")
         print(f"New donation: {value} {currency} from {donor_name}")
 
     # IMPORTANT: respond 2xx quickly so Tiltify does not deactivate the webhook.[web:1][web:2]
