@@ -39,6 +39,7 @@ async def send_ws_message(message):
 
 async def invoke_override(tier: str) -> None:
     override_tiers = {
+        "jumpscare": ["jumpscare"],
         "tier_1": [
             "pull_ghost",
             "open_inventory",
@@ -47,20 +48,20 @@ async def invoke_override(tier: str) -> None:
             "powered_melee",
             "look_down",
             "turn_around",
+        ],
+        "tier_2": [
             "throw_grenade",
             "super",
             "transcendence",
-            # "jumpscare",
             "hold_forward",
         ],
-        "tier_2": [
+        "tier_3": [
             "all_abilities",
             "dump_heavy",
             "dump_kinetic",
             "random_loadout",
-            "dance_party",
         ],
-        "tier_3": ["alt_f4"]
+        "tier_4": ["alt_f4"]
     }
     print(f"Invoking a {tier} command")
     selected_override = override_tiers[tier]
@@ -122,11 +123,16 @@ async def tiltify_webhook(
         currency = amount.get("currency")
         donor_name = payload.get("donor_name") 
         if currency == "USD":
-            if value >= 10 and value < 50:
+            if value >= 1 and value < 7:
+                await invoke_override("jumpscare")
+            elif value >= 7 and value < 14:
+                await invoke_override("jumpscare")
                 await invoke_override("tier_1")
-            elif value >= 50 and value < 100:
+            elif value >= 14 and value < 70:
+                await invoke_override("jumpscare")
                 await invoke_override("tier_2")
-            elif value >= 100:
+            elif value >= 250:
+                await invoke_override("jumpscare")
                 await invoke_override("tier_3")
         print(f"New donation: {value} {currency} from {donor_name}")
 
