@@ -117,6 +117,7 @@ async def tiltify_webhook(
 
     if "donation_updated" in event_type:
         data = payload.get("data", {})
+        print(payload)
         amount = data.get("amount", {})
         raw_value = amount.get("value")
         value = float(raw_value)
