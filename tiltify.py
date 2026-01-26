@@ -117,12 +117,11 @@ async def tiltify_webhook(
 
     if "donation_updated" in event_type:
         data = payload.get("data", {})
-        print(payload)
         amount = data.get("amount", {})
         raw_value = amount.get("value")
         value = float(raw_value)
         currency = amount.get("currency")
-        donor_name = payload.get("donor_name") 
+        donor_name = data.get("donor_name") 
         if currency == "USD":
             if value >= 1 and value < 7:
                 await invoke_override("jumpscare")
