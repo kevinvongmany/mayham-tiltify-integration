@@ -127,17 +127,17 @@ async def tiltify_webhook(
         if currency == "USD":
             # if value >= 1:
             #     await invoke_override("jumpscare")
-            if value >= 10:
-                await invoke_override("tier_1")
-                return JSONResponse({"status": "ok"}, status_code=200)
-            if value >= 50:
-                await invoke_override("tier_2")
+            if value >= 300:
+                await invoke_override("tier_4")
                 return JSONResponse({"status": "ok"}, status_code=200)
             if value >= 100:
                 await invoke_override("tier_3")
                 return JSONResponse({"status": "ok"}, status_code=200)
-            if value >= 300:
-                await invoke_override("tier_4")
+            if value >= 50:
+                await invoke_override("tier_2")
+                return JSONResponse({"status": "ok"}, status_code=200)
+            if value >= 10:
+                await invoke_override("tier_1")
                 return JSONResponse({"status": "ok"}, status_code=200)
             # if value >= 250:
             #     await invoke_override("tier_4")
