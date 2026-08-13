@@ -40,27 +40,29 @@ async def send_ws_message(message):
 async def invoke_override(tier: str) -> None:
     override_tiers = {
         "tier_1": [
-            "pull_ghost",
-            "open_inventory",
-            "jump_and_ability",
-            "class_ability",
-            "powered_melee",
-            "look_down",
-            "turn_around",
-            "throw_grenade",
-            "super",
-            "transcendence",
-            "jumpscare",
-            "hold_forward",
-        ],
-        "tier_2": [
-            "all_abilities",
             "dump_heavy",
             "dump_kinetic",
-            "random_loadout",
+            "pull_ghost",
+            "open_inventory",
+            # "jumpscare",
+        ],
+        "tier_2": [
+            "hold_forward",
+            "look_down",
+            "turn_around",
             "dance_party",
         ],
-        "tier_3": ["alt_f4"]
+        "tier_3": [
+            "class_ability",
+            "throw_grenade",
+            "jump_and_ability",
+            "all_abilities",
+            "random_loadout",
+            "powered_melee",
+            "super",
+            "transcendence",
+        ],
+        "tier_4": ["alt_f4"]
     }
     print(f"Invoking a {tier} command")
     selected_override = override_tiers[tier]
@@ -131,6 +133,8 @@ async def tiltify_webhook(
                 await invoke_override("tier_2")
             if value >= 100:
                 await invoke_override("tier_3")
+            if value >= 300:
+                await invoke_override("tier_4")
             # if value >= 250:
             #     await invoke_override("tier_4")
 
