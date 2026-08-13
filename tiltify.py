@@ -39,7 +39,6 @@ async def send_ws_message(message):
 
 async def invoke_override(tier: str) -> None:
     override_tiers = {
-        "jumpscare": ["jumpscare"],
         "tier_1": [
             "pull_ghost",
             "open_inventory",
@@ -48,21 +47,20 @@ async def invoke_override(tier: str) -> None:
             "powered_melee",
             "look_down",
             "turn_around",
-        ],
-        "tier_2": [
             "throw_grenade",
             "super",
             "transcendence",
+            "jumpscare",
             "hold_forward",
-            "dance_party",
         ],
-        "tier_3": [
+        "tier_2": [
             "all_abilities",
             "dump_heavy",
             "dump_kinetic",
             "random_loadout",
+            "dance_party",
         ],
-        "tier_4": ["alt_f4"]
+        "tier_3": ["alt_f4"]
     }
     print(f"Invoking a {tier} command")
     selected_override = override_tiers[tier]
@@ -125,16 +123,16 @@ async def tiltify_webhook(
         donor_name = data.get("donor_name") 
         print(f"New donation: {value} {currency} from {donor_name}")
         if currency == "USD":
-            if value >= 1:
-                await invoke_override("jumpscare")
-            if value >= 7:
+            # if value >= 1:
+            #     await invoke_override("jumpscare")
+            if value >= 10:
                 await invoke_override("tier_1")
-            if value >= 14:
+            if value >= 50:
                 await invoke_override("tier_2")
-            if value >= 70:
+            if value >= 100:
                 await invoke_override("tier_3")
-            if value >= 250:
-                await invoke_override("tier_4")
+            # if value >= 250:
+            #     await invoke_override("tier_4")
 
     # IMPORTANT: respond 2xx quickly so Tiltify does not deactivate the webhook.[web:1][web:2]
     return JSONResponse({"status": "ok"}, status_code=200)
