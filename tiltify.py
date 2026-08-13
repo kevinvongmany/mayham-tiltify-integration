@@ -57,14 +57,16 @@ async def invoke_override(tier: str) -> None:
         "tier_3": [
             "class_ability",
             "throw_grenade",
-            "jump_and_ability",
+            # "jump_and_ability",
+            "powered_melee",
+        ],
+        "tier_4": [
             "all_abilities",
             "random_loadout",
-            "powered_melee",
             "super",
             "transcendence",
         ],
-        "tier_4": ["alt_f4"]
+        "tier_5": ["alt_f4"]
     }
     print(f"Invoking a {tier} command")
     selected_override = override_tiers[tier]
@@ -129,19 +131,22 @@ async def tiltify_webhook(
         if currency == "USD":
             # if value >= 1:
             #     await invoke_override("jumpscare")
-            if value == 300:
+            if value >= 300:
+                await invoke_override("tier_5")
+                return JSONResponse({"status": "ok"}, status_code=200)
+            if value >= 100:
                 await invoke_override("tier_4")
                 return JSONResponse({"status": "ok"}, status_code=200)
-            if value == 100:
+            if value >= 50:
                 await invoke_override("tier_3")
                 return JSONResponse({"status": "ok"}, status_code=200)
-            if value == 50:
+            if value >= 30:
                 await invoke_override("tier_2")
                 return JSONResponse({"status": "ok"}, status_code=200)
-            if value == 10:
+            if value >= 10:
                 await invoke_override("tier_1")
                 return JSONResponse({"status": "ok"}, status_code=200)
-            if value == 5:
+            if value >= 5:
                 await invoke_override("tier_0")
                 return JSONResponse({"status": "ok"}, status_code=200)
             # if value >= 250:
